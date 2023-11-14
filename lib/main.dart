@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'src/core/constant/app_color.dart';
 import 'src/core/constant/app_size.dart';
 import 'src/core/constant/app_string.dart';
 import 'src/core/service/cache_service.dart';
+import 'src/core/theme/initial_theme.dart';
 import 'src/router/pages.dart';
 
 void main() async {
@@ -22,11 +22,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: AppString.appName,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: "Mulish",
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primary),
-        useMaterial3: true,
-      ),
+      theme: initialTheme,
       getPages: pages,
     );
   }
