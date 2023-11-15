@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../core/constant/app_route.dart';
 
 abstract class LoginController extends GetxController {
   void login();
@@ -46,7 +47,12 @@ class LoginControllerImpl extends LoginController {
   }
 
   @override
-  void goToSignUp() {
-    // TODO: implement goToSingUp
+  void goToSignUp() => Get.toNamed(AppRoute.signup);
+
+  @override
+  void onClose() {
+    _email.dispose();
+    _password.dispose();
+    super.onClose();
   }
 }

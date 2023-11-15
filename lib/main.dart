@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'src/binding/initial_binding.dart';
 import 'src/core/constant/app_size.dart';
 import 'src/core/constant/app_string.dart';
 import 'src/core/service/cache_service.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: initialTheme,
       getPages: pages,
+      initialBinding: InitialBindings(),
     );
   }
 }

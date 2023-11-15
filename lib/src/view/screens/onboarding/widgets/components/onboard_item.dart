@@ -40,7 +40,7 @@ class OnboardItem extends GetView<OnboardingController> {
               const SizedBox(height: 20),
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                     color: AppColor.orange,
                     fontSize: 20,
                     fontWeight: FontWeight.bold),

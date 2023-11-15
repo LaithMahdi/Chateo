@@ -41,6 +41,10 @@ class Input extends StatelessWidget {
           borderSide:
               BorderSide(color: AppColor.neutralDisabled.withOpacity(0.5)),
         ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: const BorderSide(color: AppColor.red, width: 1.5),
+        ),
         errorStyle: const TextStyle(
             color: AppColor.red, fontSize: 14, fontWeight: FontWeight.bold),
         suffixIcon: suffixIcon ?? const SizedBox(),

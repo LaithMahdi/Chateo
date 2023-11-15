@@ -16,7 +16,7 @@ class OnboardButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColor.orange,
           shape: BoxShape.circle,
         ),
