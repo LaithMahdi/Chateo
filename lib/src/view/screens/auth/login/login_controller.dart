@@ -54,9 +54,13 @@ class LoginControllerImpl extends LoginController {
             .setString("username", response["user"]["username"]);
         cacheService.sharedPreferences
             .setString("email", response["user"]["email"]);
+        cacheService.sharedPreferences.setString("id", response["user"]["_id"]);
+        cacheService.sharedPreferences.setString("token", response["token"]);
         Get.offAllNamed(AppRoute.initial);
         clearInput();
         update();
+      } else if (response["message"] != null) {
+        showSnackBar("Error", "Error ${response["message"]}", true);
       } else {
         _statusRequest = StatusRequest.failed;
       }

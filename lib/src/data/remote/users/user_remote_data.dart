@@ -21,4 +21,9 @@ class UserRemoteData {
     });
     return response.fold((l) => l, (r) => r);
   }
+
+  logout() async {
+    var response = await crud.postData(Api.logout, {});
+    return response.fold((l) => l, (r) => r);
+  }
 }

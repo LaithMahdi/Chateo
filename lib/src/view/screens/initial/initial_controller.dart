@@ -14,6 +14,8 @@ class InitialControllerImpl extends InitialController {
   CacheService cacheService = Get.find();
   late String? username;
   late String? email;
+  late String? id;
+  late String? token;
 
   final List<Widget> _pages = [
     const Text("2"),
@@ -48,7 +50,10 @@ class InitialControllerImpl extends InitialController {
   void onInit() async {
     username = cacheService.sharedPreferences.getString("username");
     email = cacheService.sharedPreferences.getString("email");
-    print("username: ${username!} email: ${email!}");
+    id = cacheService.sharedPreferences.getString("id");
+    token = cacheService.sharedPreferences.getString("token");
+    print(
+        "username: ${username!} email: ${email!} id: ${id!} token: ${token!}");
     super.onInit();
   }
 }
