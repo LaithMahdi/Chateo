@@ -28,4 +28,31 @@ class Crud {
       return const Left(StatusRequest.failed);
     }
   }
+
+  Future<Either<StatusRequest, Map>> fetchData(
+      String linkurl, String? authToken) async {
+    try {
+      final response = await http.get(
+        Uri.parse(linkurl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'token $authToken'
+        },
+      );
+      print("GET Method ----- ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        dynamic responsebody = jsonDecode(response.body);
+        print("Response Body: $responsebody");
+        return Right(responsebody);
+      } else if (response.statusCode == 401) {
+        return const Left(StatusRequest.unauthorized);
+      } else {
+        return const Left(StatusRequest.failed);
+      }
+    } catch (error) {
+      print("Error: $error");
+      return const Left(StatusRequest.failed);
+    }
+  }
 }

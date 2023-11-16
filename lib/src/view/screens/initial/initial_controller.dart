@@ -2,6 +2,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/service/cache_service.dart';
+import '../contact/contact_screen.dart';
 import '../home/home_screen.dart';
 import '../more/more_screen.dart';
 
@@ -18,7 +19,7 @@ class InitialControllerImpl extends InitialController {
   late String? token;
 
   final List<Widget> _pages = [
-    const Text("2"),
+    const ContactScreen(),
     const HomeScreen(),
     const MoreScreen(),
   ];

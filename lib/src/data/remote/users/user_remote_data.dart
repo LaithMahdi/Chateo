@@ -26,4 +26,9 @@ class UserRemoteData {
     var response = await crud.postData(Api.logout, {});
     return response.fold((l) => l, (r) => r);
   }
+
+  getAllUsers(String token) async {
+    var response = await crud.fetchData(Api.getAllUsers, token);
+    return response.fold((l) => l, (r) => r);
+  }
 }

@@ -19,7 +19,7 @@ class MoreViewBody extends GetView<MoreControllerImpl> {
       children: [
         MoreProfil(
           username: "${controller.initial.username}",
-          email: "${controller.initial.username}",
+          email: "${controller.initial.email}",
           onPressed: () => controller.viewProfil(),
         ),
         const VerticalSpacer(1),
