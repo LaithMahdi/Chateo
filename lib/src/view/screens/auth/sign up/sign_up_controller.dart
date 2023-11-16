@@ -1,7 +1,6 @@
 import 'package:chateo/src/api/crud.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-
 import '../../../../core/constant/app_route.dart';
 import '../../../../core/enum/statusRequest.dart';
 import '../../../../core/function/handling_data.dart';
@@ -51,7 +50,7 @@ class SignUpControllerImpl extends SignUpController {
   }
 
   @override
-  void goToLogin() => Get.toNamed(AppRoute.login);
+  void goToLogin() => Get.offAllNamed(AppRoute.login);
 
   @override
   void signUp() async {

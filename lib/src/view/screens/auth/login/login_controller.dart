@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../api/crud.dart';
 import '../../../../core/constant/app_route.dart';
+import '../../../../core/enum/statusRequest.dart';
+import '../../../../core/function/handling_data.dart';
+import '../../../../core/function/show_snackbar.dart';
+import '../../../../core/service/cache_service.dart';
+import '../../../../data/remote/users/user_remote_data.dart';
 
 abstract class LoginController extends GetxController {
   void login();
@@ -10,6 +16,9 @@ abstract class LoginController extends GetxController {
 
 class LoginControllerImpl extends LoginController {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  CacheService cacheService = Get.find();
+  StatusRequest _statusRequest = StatusRequest.loading;
+  final UserRemoteData user = UserRemoteData(Crud());
   bool _isObscure = true;
   late TextEditingController _email;
   late TextEditingController _password;
@@ -19,6 +28,7 @@ class LoginControllerImpl extends LoginController {
   GlobalKey<FormState> get formKey => _formKey;
   TextEditingController get email => _email;
   TextEditingController get password => _password;
+  StatusRequest get statusRequest => _statusRequest;
 
   @override
   void onInit() {
@@ -33,11 +43,22 @@ class LoginControllerImpl extends LoginController {
   }
 
   @override
-  void login() {
+  void login() async {
     if (_formKey.currentState!.validate()) {
-      print("success");
+      var response = await user.signInData(email.text, password.text);
+      _statusRequest = handlingData(response);
+      if (response["token"] != null) {
+        _statusRequest = StatusRequest.success;
+        cacheService.sharedPreferences.setInt("onboard", 2);
+        Get.offAllNamed(AppRoute.initial);
+        clearInput();
+        update();
+      } else {
+        _statusRequest = StatusRequest.failed;
+      }
+      update();
     } else {
-      print("error");
+      showSnackBar("Error", "Account has created with successfully", true);
     }
   }
 
@@ -48,6 +69,11 @@ class LoginControllerImpl extends LoginController {
 
   @override
   void goToSignUp() => Get.toNamed(AppRoute.signup);
+
+  clearInput() {
+    _email.clear();
+    _password.clear();
+  }
 
   @override
   void onClose() {

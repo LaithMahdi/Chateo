@@ -13,4 +13,12 @@ class UserRemoteData {
     });
     return response.fold((l) => l, (r) => r);
   }
+
+  signInData(String email, String password) async {
+    var response = await crud.postData(Api.login, {
+      "email": email,
+      "password": password,
+    });
+    return response.fold((l) => l, (r) => r);
+  }
 }

@@ -13,6 +13,11 @@ class InitialMiddleware extends GetMiddleware {
     if (myServices.sharedPreferences.getInt("onboard") == 1) {
       return const RouteSettings(name: AppRoute.login);
     }
+
+    if (myServices.sharedPreferences.getInt("onboard") == 2) {
+      return const RouteSettings(name: AppRoute.initial);
+    }
+
     return null;
   }
 }

@@ -13,7 +13,7 @@ class Crud {
         body: jsonEncode(data),
       );
       print("POST Method ----- ${response.statusCode}");
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         dynamic responsebody = jsonDecode(response.body);
         print("Response Body: $responsebody");
         return Right(responsebody);
