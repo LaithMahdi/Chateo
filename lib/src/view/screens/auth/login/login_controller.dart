@@ -50,6 +50,10 @@ class LoginControllerImpl extends LoginController {
       if (response["token"] != null) {
         _statusRequest = StatusRequest.success;
         cacheService.sharedPreferences.setInt("onboard", 2);
+        cacheService.sharedPreferences
+            .setString("username", response["user"]["username"]);
+        cacheService.sharedPreferences
+            .setString("email", response["user"]["email"]);
         Get.offAllNamed(AppRoute.initial);
         clearInput();
         update();
