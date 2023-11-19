@@ -17,6 +17,7 @@ class InitialControllerImpl extends InitialController {
   late String? email;
   late String? id;
   late String? token;
+  late String? profilePhoto;
 
   final List<Widget> _pages = [
     const ContactScreen(),
@@ -53,6 +54,7 @@ class InitialControllerImpl extends InitialController {
     email = cacheService.sharedPreferences.getString("email");
     id = cacheService.sharedPreferences.getString("id");
     token = cacheService.sharedPreferences.getString("token");
+    profilePhoto = cacheService.sharedPreferences.getString("profilePhoto");
     print(
         "username: ${username!} email: ${email!} id: ${id!} token: ${token!}");
     super.onInit();

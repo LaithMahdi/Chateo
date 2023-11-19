@@ -1,6 +1,10 @@
-import 'package:chateo/src/api/crud.dart';
-import 'package:flutter/widgets.dart';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../../api/crud.dart';
 import '../../../../core/constant/app_route.dart';
 import '../../../../core/enum/statusRequest.dart';
 import '../../../../core/function/handling_data.dart';
@@ -14,7 +18,7 @@ abstract class SignUpController extends GetxController {
 
 class SignUpControllerImpl extends SignUpController {
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
-  StatusRequest _statusRequest = StatusRequest.success;
+  StatusRequest _statusRequest = StatusRequest.loading;
   UserRemoteData user = UserRemoteData(Crud());
   late TextEditingController _email;
   late TextEditingController _username;
@@ -22,6 +26,10 @@ class SignUpControllerImpl extends SignUpController {
   late TextEditingController _confirmPassword;
   bool _isObscure = true;
   bool _isObscureConf = true;
+
+  File? _selectedImage;
+
+  File? get selectedImage => _selectedImage;
 
   // Getter
   TextEditingController get email => _email;
@@ -42,7 +50,7 @@ class SignUpControllerImpl extends SignUpController {
     super.onInit();
   }
 
-  clearInput() {
+  void clearInput() {
     _email.clear();
     _password.clear();
     _username.clear();
@@ -53,21 +61,27 @@ class SignUpControllerImpl extends SignUpController {
   void goToLogin() => Get.offAllNamed(AppRoute.login);
 
   @override
-  void signUp() async {
+  Future<void> signUp() async {
     _statusRequest = StatusRequest.loading;
     update();
     if (_form.currentState!.validate()) {
       if (_password.text != _confirmPassword.text) {
         showSnackBar(
-            "Error", "Confirm password and password are not corects ", true);
+            "Error", "Confirm password and password are not correct", true);
       } else {
-        var response =
-            await user.signUpData(username.text, email.text, password.text);
+        // try {
+        var response = await user.signUpData(
+          _username.text,
+          _email.text,
+          _password.text,
+          _selectedImage,
+        );
         _statusRequest = handlingData(response);
+
         if (response["token"] != null) {
           _statusRequest = StatusRequest.success;
           showSnackBar(
-              "Success", "Account has created with successfully", false);
+              "Success", "Account has been created successfully", false);
           clearInput();
           update();
           Get.offAllNamed(AppRoute.login);
@@ -75,19 +89,50 @@ class SignUpControllerImpl extends SignUpController {
           _statusRequest = StatusRequest.failed;
         }
         update();
+        // }
+        //  catch (e) {
+        //   print("Error during sign-up: $e");
+        //   showSnackBar("Error", "Something went wrong during sign-up", true);
+        // }
       }
     } else {
       showSnackBar("Error", "Form not valid", true);
     }
   }
 
+  Future<void> uploadImage() async {
+    try {
+      final imagePicker = ImagePicker();
+      final pickedImage =
+          await imagePicker.pickImage(source: ImageSource.camera);
+
+      if (pickedImage != null) {
+        _selectedImage = File(pickedImage.path);
+        update();
+      } else {
+        // User canceled image selection
+        // Handle accordingly, e.g., show a message to the user
+      }
+    } catch (e) {
+      // Handle exceptions related to image picking
+      print("Error picking image: $e");
+      // You can show a snackbar or a dialog to inform the user about the error
+    }
+  }
+
+  void deleteImage() {
+    // Implement logic to delete the selected image
+    _selectedImage = null;
+    update();
+  }
+
   void updateObscure() {
-    _isObscure = _isObscure ? false : true;
+    _isObscure = !_isObscure;
     update();
   }
 
   void updateObscureConf() {
-    _isObscureConf = _isObscureConf ? false : true;
+    _isObscureConf = !_isObscureConf;
     update();
   }
 
@@ -100,3 +145,5 @@ class SignUpControllerImpl extends SignUpController {
     super.onClose();
   }
 }
+
+// ... The rest of your code ...

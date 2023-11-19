@@ -18,8 +18,9 @@ class LoginControllerImpl extends LoginController {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   CacheService cacheService = Get.find();
   StatusRequest _statusRequest = StatusRequest.loading;
-  final UserRemoteData user = UserRemoteData(Crud());
+  UserRemoteData user = UserRemoteData(Crud());
   bool _isObscure = true;
+  bool _isDisposed = false;
   late TextEditingController _email;
   late TextEditingController _password;
 
@@ -56,6 +57,8 @@ class LoginControllerImpl extends LoginController {
             .setString("email", response["user"]["email"]);
         cacheService.sharedPreferences.setString("id", response["user"]["_id"]);
         cacheService.sharedPreferences.setString("token", response["token"]);
+        cacheService.sharedPreferences
+            .setString("profilePhoto", response["user"]["profilePhoto"]);
         Get.offAllNamed(AppRoute.initial);
         clearInput();
         update();
@@ -78,13 +81,16 @@ class LoginControllerImpl extends LoginController {
   @override
   void goToSignUp() => Get.toNamed(AppRoute.signup);
 
-  clearInput() {
-    _email.clear();
-    _password.clear();
+  void clearInput() {
+    if (!_isDisposed) {
+      _email.clear();
+      _password.clear();
+    }
   }
 
   @override
   void onClose() {
+    _isDisposed = true; // Set the flag when controllers are disposed
     _email.dispose();
     _password.dispose();
     super.onClose();

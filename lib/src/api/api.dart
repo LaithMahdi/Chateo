@@ -4,5 +4,7 @@ class Api {
   static const String signUp = "$baseUrl/users/signup";
   static const String login = "$baseUrl/users/signin";
   static const String logout = "$baseUrl/users/logout";
+  //http://localhost:5000/upload/images/
+  static const String getImage = "$baseUrl/upload/images";
   static const String getAllUsers = "$baseUrl/users/all-users";
 }

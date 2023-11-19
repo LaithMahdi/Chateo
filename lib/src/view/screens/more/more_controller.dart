@@ -33,7 +33,7 @@ class MoreControllerImpl extends MoreController {
       cacheService.sharedPreferences.setString("email", "");
       cacheService.sharedPreferences.setString("id", "");
       cacheService.sharedPreferences.setString("token", "");
-
+      cacheService.sharedPreferences.setString("profilePhoto", "");
       Get.offAllNamed(AppRoute.login);
 
       update();

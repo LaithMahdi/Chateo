@@ -9,7 +9,6 @@ import '../../../../../core/function/valid_input.dart';
 import '../../../../../shared/spacer/vertical_spacer.dart';
 import '../../widgets/auth_button.dart';
 import '../../widgets/auth_text_link.dart';
-import '../../widgets/auth_title.dart';
 import '../../widgets/input.dart';
 import '../../widgets/label.dart';
 import '../sign_up_controller.dart';
@@ -24,7 +23,7 @@ class SignUpViewBody extends GetView<SignUpControllerImpl> {
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
           children: [
-            const AuthTitle("Enter information to create your account with us"),
+            const Center(child: UploadImage()),
             const Label("Username :"),
             Input(
               hintText: "Username",
@@ -73,7 +72,7 @@ class SignUpViewBody extends GetView<SignUpControllerImpl> {
             const VerticalSpacer(2),
             GetBuilder<SignUpControllerImpl>(
               builder: (controller) =>
-                  controller.statusRequest == StatusRequest.loading
+                  controller.statusRequest != StatusRequest.loading
                       ? Center(child: LottieBuilder.asset(AppImage.loading))
                       : AuthButton(
                           text: "Sign up",
@@ -85,5 +84,54 @@ class SignUpViewBody extends GetView<SignUpControllerImpl> {
             const VerticalSpacer(1),
           ],
         ));
+  }
+}
+
+class UploadImage extends GetView<SignUpControllerImpl> {
+  const UploadImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        CircleAvatar(
+          maxRadius: MediaQuery.sizeOf(context).width * .2,
+          backgroundColor: AppColor.neutralDisabled,
+          child: GetBuilder<SignUpControllerImpl>(
+            builder: (controller) => CircleAvatar(
+              maxRadius: MediaQuery.sizeOf(context).width * .19,
+              backgroundImage: controller.selectedImage != null
+                  ? FileImage(controller.selectedImage!)
+                      as ImageProvider<Object>
+                  : const AssetImage(AppImage.placeholder),
+            ),
+          ),
+        ),
+        Positioned(
+            bottom: 0,
+            right: 0,
+            child: InkWell(
+              onTap: () => controller.selectedImage == null
+                  ? controller.uploadImage()
+                  : controller.deleteImage(),
+              child: GetBuilder<SignUpControllerImpl>(
+                builder: (controller) => AnimatedContainer(
+                    duration: const Duration(milliseconds: 600),
+                    decoration: BoxDecoration(
+                        color: controller.selectedImage != null
+                            ? AppColor.red
+                            : AppColor.neutralDisabled,
+                        shape: BoxShape.circle),
+                    padding: const EdgeInsets.all(12),
+                    curve: Curves.ease,
+                    child: Icon(
+                        controller.selectedImage != null
+                            ? Icons.close
+                            : EvaIcons.camera,
+                        color: AppColor.blackNeutral)),
+              ),
+            ))
+      ],
+    );
   }
 }

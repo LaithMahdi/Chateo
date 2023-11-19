@@ -6,12 +6,14 @@ import '../../../../../shared/spacer/vertical_spacer.dart';
 class MoreProfil extends StatelessWidget {
   final String username;
   final String email;
+  final String profileImage;
   final VoidCallback onPressed;
   const MoreProfil(
       {super.key,
       required this.username,
       required this.email,
-      required this.onPressed});
+      required this.onPressed,
+      required this.profileImage});
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +21,19 @@ class MoreProfil extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
       child: Row(
         children: [
-          const CircleAvatar(
-            backgroundColor: AppColor.neutralLine,
-            maxRadius: 30,
-            child: Icon(EvaIcons.personOutline,
-                size: 30, color: AppColor.blackNeutral),
+          CircleAvatar(
+            // ignore: unnecessary_null_comparison
+            backgroundImage: profileImage != null
+                ? NetworkImage(profileImage) // Assuming profilePhoto is a URL
+                : null,
+            // ignore: unnecessary_null_comparison
+            child: profileImage == null
+                ? const Icon(
+                    EvaIcons.personOutline,
+                    size: 30,
+                    color: Colors.black,
+                  )
+                : null,
           ),
           const HorizintalSpacer(1.5),
           Column(
