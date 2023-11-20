@@ -8,6 +8,7 @@ import '../view/screens/home/home_screen.dart';
 import '../view/screens/initial/initial_screen.dart';
 import '../view/screens/more/more_screen.dart';
 import '../view/screens/onboarding/onboarding_screen.dart';
+import '../view/screens/personal_chat/personal_chat_screen.dart';
 import '../view/screens/splash/splash_screen.dart';
 
 List<GetPage<dynamic>>? pages = [
@@ -22,4 +23,5 @@ List<GetPage<dynamic>>? pages = [
   GetPage(name: AppRoute.initial, page: () => const InitialScreen()),
   GetPage(name: AppRoute.more, page: () => const MoreScreen()),
   GetPage(name: AppRoute.contact, page: () => const ContactScreen()),
+  GetPage(name: AppRoute.personalChat, page: () => const PersonalChatScreen()),
 ];

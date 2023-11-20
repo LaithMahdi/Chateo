@@ -26,8 +26,12 @@ class ContactScreen extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 itemCount: controller.users.length,
-                itemBuilder: (context, index) =>
-                    ContactItem(user: controller.users[index]),
+                itemBuilder: (context, index) => ContactItem(
+                  user: controller.users[index],
+                  onTap: () => controller.goToPersonalChat(
+                      controller.users[index].id!,
+                      controller.users[index].username!),
+                ),
                 separatorBuilder: (context, index) => const VerticalSpacer(1.5),
               ),
       ),
