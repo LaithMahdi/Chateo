@@ -1,3 +1,4 @@
+import 'package:chateo/src/data/model/message_model.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,30 @@ class PersonalChatScreen extends StatelessWidget {
         body: Stack(
           children: [
             Positioned(
+                top: 0,
+                right: 0,
+                left: 0,
+                bottom: 5,
+                child: GetBuilder<PersonalChatControllerImpl>(
+                  builder: (controller) => ListView.builder(
+                    itemCount: controller.messages.length,
+                    itemBuilder: (context, index) {
+                      MessageModel msg = controller.messages[index];
+                      return Container(
+                        padding: const EdgeInsets.all(5),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
+                        constraints:
+                            BoxConstraints(maxWidth: AppSize.screenWidth! - 60),
+                        decoration: const BoxDecoration(
+                          color: AppColor.orange,
+                        ),
+                        child: Text(msg.content),
+                      );
+                    },
+                  ),
+                )),
+            Positioned(
               bottom: 0,
               right: 0,
               left: 0,
@@ -47,9 +72,10 @@ class PersonalChatScreen extends StatelessWidget {
                         onPressed: () {},
                         icon: const Icon(EvaIcons.plus,
                             size: 25, color: AppColor.neutralDisabled)),
-                    const Expanded(
+                    Expanded(
                         child: TextField(
-                      decoration: InputDecoration(
+                      controller: controller.message,
+                      decoration: const InputDecoration(
                           hintText: "Write your message",
                           hintStyle: TextStyle(
                               fontSize: 14, color: AppColor.neutralWeak),
@@ -62,7 +88,7 @@ class PersonalChatScreen extends StatelessWidget {
                           )),
                     )),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () => controller.send(),
                         icon: const Icon(EvaIcons.navigation2,
                             color: AppColor.primary, size: 25))
                   ],

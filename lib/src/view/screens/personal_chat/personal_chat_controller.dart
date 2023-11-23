@@ -39,14 +39,37 @@ class PersonalChatControllerImpl extends PersonalChatController {
       "transports": ['websocket'],
       "autoConnect": false
     };
-    socket = Io.io("${Api.baseUrl}/messages", options);
+    socket = Io.io(Api.baseUrl, options);
     socket.connect();
     socket.onConnect((data) {
-      print("user connected");
-      socket.on("connection", (msg) {
-        update();
-      });
+      print("successfully connected");
     });
-    socket.emit("login", initial.id);
+
+    socket.on('res', (data) {
+      //messages.add(data);
+    });
+    update();
+  }
+
+  void send() {
+    if (_message.text.isNotEmpty) {
+      MessageModel sentMessage = MessageModel(
+        senderId: initial.id!,
+        receiverId: _id,
+        content: _message.text,
+        createdAt: DateTime.now(),
+      );
+      messages.add(sentMessage);
+      update();
+      socket.emit("message", sentMessage.toJson());
+      _message.clear();
+    }
+  }
+
+  @override
+  void onClose() {
+    socket.dispose();
+    _message.dispose();
+    super.onClose();
   }
 }
