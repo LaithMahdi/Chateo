@@ -18,7 +18,7 @@ abstract class SignUpController extends GetxController {
 
 class SignUpControllerImpl extends SignUpController {
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
-  StatusRequest _statusRequest = StatusRequest.loading;
+  StatusRequest _statusRequest = StatusRequest.none;
   UserRemoteData user = UserRemoteData(Crud());
   late TextEditingController _email;
   late TextEditingController _username;
@@ -68,14 +68,13 @@ class SignUpControllerImpl extends SignUpController {
       if (_password.text != _confirmPassword.text) {
         showSnackBar(
             "Error", "Confirm password and password are not correct", true);
+        _statusRequest = StatusRequest.failed;
+      } else if (_selectedImage == null) {
+        showSnackBar("Error", "Image has not picked", true);
+        _statusRequest = StatusRequest.failed;
       } else {
-        // try {
         var response = await user.signUpData(
-          _username.text,
-          _email.text,
-          _password.text,
-          _selectedImage,
-        );
+            _username.text, _email.text, _password.text, _selectedImage);
         _statusRequest = handlingData(response);
 
         if (response["token"] != null) {
@@ -83,20 +82,17 @@ class SignUpControllerImpl extends SignUpController {
           showSnackBar(
               "Success", "Account has been created successfully", false);
           clearInput();
-          update();
           Get.offAllNamed(AppRoute.login);
+          update();
         } else {
+          showSnackBar("Failed", "Account hasen't created", true);
           _statusRequest = StatusRequest.failed;
         }
         update();
-        // }
-        //  catch (e) {
-        //   print("Error during sign-up: $e");
-        //   showSnackBar("Error", "Something went wrong during sign-up", true);
-        // }
       }
     } else {
       showSnackBar("Error", "Form not valid", true);
+      _statusRequest = StatusRequest.failed;
     }
   }
 
@@ -109,19 +105,13 @@ class SignUpControllerImpl extends SignUpController {
       if (pickedImage != null) {
         _selectedImage = File(pickedImage.path);
         update();
-      } else {
-        // User canceled image selection
-        // Handle accordingly, e.g., show a message to the user
       }
     } catch (e) {
-      // Handle exceptions related to image picking
       print("Error picking image: $e");
-      // You can show a snackbar or a dialog to inform the user about the error
     }
   }
 
   void deleteImage() {
-    // Implement logic to delete the selected image
     _selectedImage = null;
     update();
   }
@@ -145,5 +135,3 @@ class SignUpControllerImpl extends SignUpController {
     super.onClose();
   }
 }
-
-// ... The rest of your code ...

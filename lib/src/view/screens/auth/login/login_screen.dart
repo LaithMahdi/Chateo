@@ -8,7 +8,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(LoginControllerImpl());
+    Get.lazyPut(() => LoginControllerImpl());
     return Scaffold(
       appBar: AppBar(
         title: const Text("Sign In",

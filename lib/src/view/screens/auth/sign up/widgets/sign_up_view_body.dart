@@ -72,7 +72,7 @@ class SignUpViewBody extends GetView<SignUpControllerImpl> {
             const VerticalSpacer(2),
             GetBuilder<SignUpControllerImpl>(
               builder: (controller) =>
-                  controller.statusRequest != StatusRequest.loading
+                  controller.statusRequest == StatusRequest.loading
                       ? Center(child: LottieBuilder.asset(AppImage.loading))
                       : AuthButton(
                           text: "Sign up",

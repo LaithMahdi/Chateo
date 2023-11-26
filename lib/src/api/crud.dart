@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import '../core/enum/statusRequest.dart';
@@ -38,20 +38,20 @@ class Crud {
   Future<Either<StatusRequest, Map>> postData(
       String linkurl, dynamic data) async {
     try {
-      final response = await dio.post(
-        linkurl,
-        options: Options(headers: {'Content-Type': 'application/json'}),
-        data: jsonEncode(data),
+      final response = await http.post(
+        Uri.parse(linkurl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(data),
       );
 
       print("POST Method ----- ${response.statusCode}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        dynamic responsebody = response.data;
+        dynamic responsebody = json.decode(response.body);
         print("Response Body: $responsebody");
         return Right(responsebody);
       } else if (response.statusCode == 400) {
-        Map<String, dynamic> responsebody = response.data;
+        dynamic responsebody = json.decode(response.body);
         return Right(responsebody);
       } else {
         return const Left(StatusRequest.failed);
@@ -65,17 +65,18 @@ class Crud {
   Future<Either<StatusRequest, Map>> fetchData(
       String linkurl, String? authToken) async {
     try {
-      dio.options.headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'token $authToken',
-      };
-
-      final response = await dio.get(linkurl);
+      final response = await http.get(
+        Uri.parse(linkurl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'token $authToken',
+        },
+      );
 
       print("GET Method ----- ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        dynamic responsebody = response.data;
+        dynamic responsebody = json.decode(response.body);
         print("Response Body: $responsebody");
         return Right(responsebody);
       } else if (response.statusCode == 401) {

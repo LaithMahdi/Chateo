@@ -17,24 +17,24 @@ abstract class LoginController extends GetxController {
 class LoginControllerImpl extends LoginController {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   CacheService cacheService = Get.find();
-  StatusRequest _statusRequest = StatusRequest.loading;
+  StatusRequest _statusRequest = StatusRequest.none;
   UserRemoteData user = UserRemoteData(Crud());
   bool _isObscure = true;
-  bool _isDisposed = false;
-  late TextEditingController _email;
-  late TextEditingController _password;
+  final bool _isDisposed = false;
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
 
   // Getter
   bool get obscure => _isObscure;
   GlobalKey<FormState> get formKey => _formKey;
-  TextEditingController get email => _email;
-  TextEditingController get password => _password;
+  TextEditingController get email => _emailController;
+  TextEditingController get password => _passwordController;
   StatusRequest get statusRequest => _statusRequest;
 
   @override
   void onInit() {
-    _email = TextEditingController();
-    _password = TextEditingController();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
     super.onInit();
   }
 
@@ -46,9 +46,10 @@ class LoginControllerImpl extends LoginController {
   @override
   void login() async {
     if (_formKey.currentState!.validate()) {
-      var response = await user.signInData(email.text, password.text);
+      var response = await user.signInData(
+          _emailController.text, _passwordController.text);
       _statusRequest = handlingData(response);
-      if (response["token"] != null) {
+      if (response["message"] == "success") {
         _statusRequest = StatusRequest.success;
         cacheService.sharedPreferences.setInt("onboard", 2);
         cacheService.sharedPreferences
@@ -59,17 +60,14 @@ class LoginControllerImpl extends LoginController {
         cacheService.sharedPreferences.setString("token", response["token"]);
         cacheService.sharedPreferences
             .setString("profilePhoto", response["user"]["profilePhoto"]);
-        Get.offAllNamed(AppRoute.initial);
+        Get.offNamed(AppRoute.initial);
         clearInput();
         update();
-      } else if (response["message"] != null) {
-        showSnackBar("Error", "Error ${response["message"]}", true);
       } else {
         _statusRequest = StatusRequest.failed;
+        showSnackBar("Error", "Error ${response["message"]}", true);
       }
       update();
-    } else {
-      showSnackBar("Error", "Account has created with successfully", true);
     }
   }
 
@@ -79,20 +77,19 @@ class LoginControllerImpl extends LoginController {
   }
 
   @override
-  void goToSignUp() => Get.toNamed(AppRoute.signup);
+  void goToSignUp() => Get.offAllNamed(AppRoute.signup);
 
   void clearInput() {
     if (!_isDisposed) {
-      _email.clear();
-      _password.clear();
+      _emailController.clear();
+      _passwordController.clear();
     }
   }
 
   @override
   void onClose() {
-    _isDisposed = true; // Set the flag when controllers are disposed
-    _email.dispose();
-    _password.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.onClose();
   }
 }

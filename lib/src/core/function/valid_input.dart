@@ -8,14 +8,14 @@ validInput(String val, int min, int max, String type) {
   }
 
   if (val.isEmpty) {
-    return "Can't be empty";
+    return "$val can't be empty";
   }
 
   if (val.length < min) {
-    return "must be less than";
+    return "must be less than $min";
   }
 
   if (val.length > max) {
-    return "must be greater than";
+    return "must be greater than $max";
   }
 }
