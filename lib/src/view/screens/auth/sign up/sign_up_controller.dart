@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:chateo/src/core/constant/app_color.dart';
+import 'package:chateo/src/core/constant/app_size.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -133,5 +136,46 @@ class SignUpControllerImpl extends SignUpController {
     _password.dispose();
     _confirmPassword.dispose();
     super.onClose();
+  }
+
+  Future<void> uploadImageFromGallery() async {
+    try {
+      final imagePicker = ImagePicker();
+      final pickedImage = await imagePicker.pickImage(
+        source: ImageSource.gallery, // Change source to ImageSource.gallery
+      );
+
+      if (pickedImage != null) {
+        _selectedImage = File(pickedImage.path);
+        update();
+      }
+    } catch (e) {
+      print("Error picking image: $e");
+    }
+  }
+
+  showBottomSheet() {
+    Get.bottomSheet(
+        SizedBox(
+          height: AppSize.screenHeight! * .15,
+          child: Row(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                child: const Icon(EvaIcons.camera, size: 30),
+                onTap: () => uploadImage(),
+              )),
+              Expanded(
+                  child: GestureDetector(
+                child: const Icon(Icons.photo_library, size: 30),
+                onTap: () => uploadImageFromGallery(),
+              )),
+            ],
+          ),
+        ),
+        backgroundColor: AppColor.white,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15), topRight: Radius.circular(10))));
   }
 }

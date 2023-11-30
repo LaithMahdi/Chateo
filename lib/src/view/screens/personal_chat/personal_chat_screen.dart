@@ -1,10 +1,8 @@
-import 'package:chateo/src/data/model/message_model.dart';
 import 'package:chateo/src/shared/spacer/vertical_spacer.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jiffy/jiffy.dart';
-
+import 'package:timeago/timeago.dart' as timeago;
 import '../../../core/constant/app_color.dart';
 import '../../../core/constant/app_size.dart';
 import 'personal_chat_controller.dart';
@@ -70,15 +68,13 @@ class PersonalChatScreen extends StatelessWidget {
 
                   ListView.builder(
                 controller: controller.scrollController,
-                itemCount: controller.messages.length,
+                itemCount: controller.messages.length + 1,
                 itemBuilder: (context, index) {
                   if (index == controller.messages.length) {
-                    return const VerticalSpacer(7);
+                    return const VerticalSpacer(2);
                   }
-                  return MessageChat(
-                    isSender: controller.messages[index].type == "sender"
-                        ? true
-                        : false,
+                  return ChatMessage(
+                    isSender: controller.messages[index].isSender,
                     message: controller.messages[index].message,
                     date: controller.messages[index].date,
                   );
@@ -125,68 +121,18 @@ class PersonalChatScreen extends StatelessWidget {
         ));
   }
 }
-/*
+
 class ChatMessage extends StatelessWidget {
-  final MessageModel msg;
-
-  const ChatMessage({super.key, required this.msg});
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment:
-          msg.type != "destination" ? Alignment.topRight : Alignment.topLeft,
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-        constraints: BoxConstraints(maxWidth: AppSize.screenWidth! - 60),
-        decoration: BoxDecoration(
-            color: msg.type = "source" ? AppColor.primary : AppColor.white,
-            borderRadius: BorderRadius.only(
-              bottomRight: msg.type != "source"
-                  ? const Radius.circular(0)
-                  : const Radius.circular(16),
-              topRight: const Radius.circular(16),
-              topLeft: const Radius.circular(16),
-              bottomLeft: msg.type != "source"
-                  ? const Radius.circular(16)
-                  : const Radius.circular(0),
-            )),
-        child: Column(
-          crossAxisAlignment: msg.type != "source"
-              ? CrossAxisAlignment.end
-              : CrossAxisAlignment.start,
-          children: [
-            Text(msg.message,
-                style: TextStyle(
-                    fontSize: 14,
-                    color: msg.type != "source"
-                        ? AppColor.white
-                        : AppColor.blackNeutral)),
-            const VerticalSpacer(0.5),
-            Text(Jiffy.parse(msg.date.toString()).Hm,
-                style: TextStyle(
-                    fontSize: 10,
-                    color: msg.type != "source"
-                        ? AppColor.white
-                        : AppColor.neutralDisabled))
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/
-
-class MessageChat extends StatelessWidget {
   final String message;
   final DateTime date;
   final bool isSender;
-  const MessageChat(
-      {super.key,
-      required this.isSender,
-      required this.message,
-      required this.date});
+
+  const ChatMessage({
+    Key? key,
+    required this.isSender,
+    required this.message,
+    required this.date,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -207,21 +153,33 @@ class MessageChat extends StatelessWidget {
               bottomLeft: isSender
                   ? const Radius.circular(16)
                   : const Radius.circular(0),
-            )),
+            ),
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 3,
+                  spreadRadius: 0,
+                  offset: const Offset(1, 1),
+                  color: AppColor.black.withOpacity(0.1))
+            ]),
         child: Column(
           crossAxisAlignment:
               isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            Text(message,
-                style: TextStyle(
-                    fontSize: 14,
-                    color: isSender ? AppColor.white : AppColor.blackNeutral)),
+            Text(
+              message,
+              style: TextStyle(
+                fontSize: 14,
+                color: isSender ? AppColor.white : AppColor.blackNeutral,
+              ),
+            ),
             const VerticalSpacer(0.5),
-            Text(Jiffy.parse(date.toString()).Hm,
-                style: TextStyle(
-                    fontSize: 10,
-                    color:
-                        isSender ? AppColor.white : AppColor.neutralDisabled))
+            Text(
+              timeago.format(date),
+              style: TextStyle(
+                fontSize: 10,
+                color: isSender ? AppColor.white : AppColor.neutralDisabled,
+              ),
+            ),
           ],
         ),
       ),

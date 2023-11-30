@@ -111,24 +111,21 @@ class UploadImage extends GetView<SignUpControllerImpl> {
             bottom: 0,
             right: 0,
             child: InkWell(
-              onTap: () => controller.selectedImage == null
-                  ? controller.uploadImage()
-                  : controller.deleteImage(),
+              onTap: () => controller.showBottomSheet(),
               child: GetBuilder<SignUpControllerImpl>(
                 builder: (controller) => AnimatedContainer(
                     duration: const Duration(milliseconds: 600),
-                    decoration: BoxDecoration(
-                        color: controller.selectedImage != null
-                            ? AppColor.red
-                            : AppColor.neutralDisabled,
+                    decoration: const BoxDecoration(
+                        color: AppColor.neutralDisabled,
                         shape: BoxShape.circle),
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(10),
                     curve: Curves.ease,
                     child: Icon(
                         controller.selectedImage != null
-                            ? Icons.close
+                            ? EvaIcons.edit
                             : EvaIcons.camera,
-                        color: AppColor.blackNeutral)),
+                        color: AppColor.blackNeutral,
+                        size: 20)),
               ),
             ))
       ],

@@ -6,4 +6,8 @@ class Api {
   static const String logout = "$baseUrl/users/logout";
   static const String getImage = "$baseUrl/upload/images";
   static const String getAllUsers = "$baseUrl/users/all-users";
+  //http://localhost:5000/messages/get-messages
+  //messages
+  static String getMessageBetweenTwoUsers(String senderId, String receiverId) =>
+      "$baseUrl/messages/get-messages?senderId=$senderId&receiverId=$receiverId";
 }
