@@ -35,38 +35,7 @@ class PersonalChatScreen extends StatelessWidget {
           children: [
             Expanded(
                 child: GetBuilder<PersonalChatControllerImpl>(
-              builder: (controller) =>
-                  /* ListView(
-                    children: [
-                      ChatMessage(
-                        msg: MessageModel(
-                            senderId: controller.id,
-                            receiverId: "",
-                            createdAt: DateTime.now(),
-                            content: "heloo bro"),
-                        senderID: controller.id,
-                      ),
-                      ChatMessage(
-                        msg: MessageModel(
-                            senderId: "555454454",
-                            receiverId: "554",
-                            createdAt: DateTime.now(),
-                            content: "i'ma very happy to know you"),
-                        senderID: controller.id,
-                      ),
-                      ChatMessage(
-                        msg: MessageModel(
-                            senderId: controller.id,
-                            receiverId: "",
-                            createdAt: DateTime.now(),
-                            content:
-                                "thanksssssssssssssssssssssssssssssssssssssssssssssssssssssss"),
-                        senderID: controller.id,
-                      ),
-                    ],
-                  ),*/
-
-                  ListView.builder(
+              builder: (controller) => ListView.builder(
                 controller: controller.scrollController,
                 itemCount: controller.messages.length + 1,
                 itemBuilder: (context, index) {

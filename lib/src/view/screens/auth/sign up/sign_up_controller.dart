@@ -112,6 +112,7 @@ class SignUpControllerImpl extends SignUpController {
     } catch (e) {
       print("Error picking image: $e");
     }
+    Get.back();
   }
 
   void deleteImage() {
@@ -141,9 +142,8 @@ class SignUpControllerImpl extends SignUpController {
   Future<void> uploadImageFromGallery() async {
     try {
       final imagePicker = ImagePicker();
-      final pickedImage = await imagePicker.pickImage(
-        source: ImageSource.gallery, // Change source to ImageSource.gallery
-      );
+      final pickedImage =
+          await imagePicker.pickImage(source: ImageSource.gallery);
 
       if (pickedImage != null) {
         _selectedImage = File(pickedImage.path);
@@ -152,6 +152,7 @@ class SignUpControllerImpl extends SignUpController {
     } catch (e) {
       print("Error picking image: $e");
     }
+    Get.back();
   }
 
   showBottomSheet() {

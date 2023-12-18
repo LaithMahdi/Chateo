@@ -29,7 +29,10 @@ class MoreViewBody extends GetView<MoreControllerImpl> {
         MoreItem(
             icon: EvaIcons.messageCircleOutline, text: "Chats", onTap: () {}),
         const VerticalSpacer(2),
-        MoreItem(icon: EvaIcons.sunOutline, text: "Appereance", onTap: () {}),
+        MoreItem(
+            icon: EvaIcons.sunOutline,
+            text: "Appereance",
+            onTap: () => controller.changeApperance()),
         MoreItem(
             icon: EvaIcons.bellOutline, text: "Notification", onTap: () {}),
         MoreItem(

@@ -42,4 +42,9 @@ class MoreControllerImpl extends MoreController {
     }
     update();
   }
+
+  changeApperance() {
+    // _themeController.toggleTheme();
+    // print(_themeController.themeMode);
+  }
 }
